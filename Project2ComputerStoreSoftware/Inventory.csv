@@ -1,4 +1,4 @@
-SerialNumber,Manufacturer,Condition,RAM,Storage,PurchasePrice,SalePrice,SoldFlag
+SerialNumber,Type,Condition,RAM,Storage,PurchasePrice,SalePrice,SoldFlag
 1,MacBook Pro,New,8GB,512GB,1100,1300,
 2,MacBook Air,Refurbished,4GB,128GB,600,800,
 3,Lenovo ThinkPad,New,16GB,256GB,1200,1500,
