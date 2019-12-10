@@ -28,27 +28,11 @@ if transaction_choice == 'q':
     print("Goodbye")
 
 if transaction_choice == str(2):
-    #maybe first print out a list of available NEW computers???
     print("Starting a new transaction for a new computer...")
     sleep(1)
-    manufacturer_input = input("What type would the customer like (Apple, Dell, or Lenovo)? ")
+    make = input("What type would the customer like (Apple, Dell, or Lenovo)? ")
     #print a list of available computers based on this input
     # Going to have to put a try/catch around this for manufacturers that we don't have in stock
-    ram_input = input("How much RAM would the customer like (4GB, 8GB, or 16GB)? ")
+    ram = input("How much RAM would the customer like (4GB, 8GB, or 16GB)? ")
     #print a list of available ram from the type that was entered
-    storage_input = input("How much storage would the customer like (128GB, 256GB, 512GB, or 1TB)? ")
-    #print a list of computer with the above configuration
-    new_comp = NewComputer(manufacturer_input, ram_input, storage_input)
-    #if this object matches one of the configurations in the pickle file, then mark it as sold
-    print(new_comp)
-
-    #writing a json file
-    with open("new_comp_test.json", "a") as file:
-        frozen = jsonpickle.encode(new_comp)
-        file.write(frozen)
-
-#reading a json file
-    #with open("new_comp_test.json", "r") as file:
-        #contents = file.read()
-        #unfrozen = jsonpickle.decode(contents)
-        #print(unfrozen)
+    storage = input("How much storage would the customer like (128GB, 256GB, 512GB, or 1TB)? ")
