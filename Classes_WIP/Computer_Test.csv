@@ -1,7 +1,0 @@
-SerialNumber,Condition,Make,Model,RAM,Storage,SellPrice,AvailableForSale
-1,New,Apple,Macbook Pro,8GB,256GB,1300,Y
-2,Refurbished,Apple,Macbook Air,4GB,128GB,800,N
-3,New,Dell,XPS 13,16GB,256GB,1500,N
-4,New,Lenovo,ThinkPad,8GB,512GB,1400,N
-5,Refurbished,HP,Spectre,4GB,128GB,500,N
-6,New,Dell,XPS 15,16GB,1TB,2000,Y

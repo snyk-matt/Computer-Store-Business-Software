@@ -7,6 +7,7 @@ import os.path
 import pandas as pd
 #import pickle
 from Repair import *
+from SalesAssistant import *
 import sys
 from time import *
 
@@ -22,6 +23,7 @@ def menu():
         print("Press 1 to conduct a repair transaction")
         print("Press 2 to see a list of available computer for sale")
         print("Press 3 to sell a new or refurbished computer")
+        print("Press 4 to access the Sales Assistant software")
         print("Press q to exit the program")
         
         transaction_choice = input(">>> ")
@@ -36,6 +38,7 @@ def repair_select():
     ram = input("Please enter the RAM: ")
     storage = input("Please enter the storage capacity: ")
     repairType = input("Please enter the repair type: ")
+    #repairHours = input("Enter the number of hours for the repair: ")
     repairCost = input("Please enter the repair cost: ")
     repairSellPrice = input("Please enter the repair sell price: ")
 
@@ -76,12 +79,77 @@ def sell_computer():
     sleep(1)
     avail_inventory_df = pd.read_csv('Computer_Inventory.csv')
     print(avail_inventory_df.loc[(avail_inventory_df['AvailableForSale']=='Y')].to_string(index=False) + "\n")
-    sell_input = int(input("Enter the serial number for the computer you'd like to sell: \n"))
-    #avail_inventory_df.loc[(avail_inventory_df['SerialNumber'] == sell_input) & (inventory_df['AvailableForSale'] == 'N')]
-    # ***NEED TO FIND OUT HOW TO MAKE BOOLEANS/CONDITIONALS***
-    avail_inventory_df.loc[avail_inventory_df['SerialNumber'] == sell_input, 'AvailableForSale'] = 'N'
+    sell_input = int(input("Enter the serial number for the computer you'd like to sell: \n")) - 1
+    
+    while avail_inventory_df.at[sell_input, 'AvailableForSale'] == 'N':
+        try:
+            sell_input = int(input("Unavailable, please enter a different serial number: \n")) - 1
+            if avail_inventory_df.at[sell_input, 'AvailableForSale'] == 'Y':
+                print("updating csv")
+        except(ValueError, TypeError, KeyError):
+            print("Invalid input")
+
+    if avail_inventory_df.at[sell_input, 'AvailableForSale'] == 'Y':
+        print("This serial number is available for sale")
+        avail_inventory_df.at[sell_input, 'AvailableForSale'] = 'N'
+        print("Updating to csv")
+
     avail_inventory_df.to_csv(file_name, index=False)
-    print("Serial number " + sell_input + " was successfully sold and updated in the system. \n")
+
+def start_sales_assistant():
+
+    print("Starting Sales Assistant software... \n")
+    sleep(1)
+    user_login_first = input("To log in please enter your first name: ").title()
+    user_login_last = input("Please enter your last name: ").title()
+    print()
+    user = SalesAssistant(user_login_first, user_login_last)
+    print(user.login())
+    print("(1) to add a new employee to the system ")
+    sleep(2)
+    print("(2) to remove an employee from the system ")
+    sleep(2)
+    print("(3) to log your work hours ")
+    sleep(2)
+    print("Press q to log out and return to the main program ")
+    
+    sales_assistant_choice = ' '
+
+    while sales_assistant_choice != 'q':
+
+        sales_assistant_choice = input(">>> ")
+
+        if sales_assistant_choice == str(1):
+        
+            fname = input("What's the new employee's first name? ").title()
+            lname = input("What's the new employee's last name? ").title()
+            phone_num = input("What's the new employee's phone number? ")
+            user.add_new_user(fname, lname, phone_num)
+
+            if not user.sales_assistant_menu():
+                user.logout()
+                menu()
+                print("Goodbye")
+                sys.exit()
+
+        elif sales_assistant_choice == str(2):
+            # do something here
+            if not user.sales_assistant_menu():
+                user.logout()
+                menu()
+                print("Goodbye")
+                sys.exit()
+
+        elif sales_assistant_choice == str(3):
+            # do something here
+            if not user.sales_assistant_menu():
+                user.logout()
+                print("Goodbye")
+                sys.exit()
+
+        else:
+            user.logout()
+            menu()
 
 print("Welcome to the Brown Family Computer & Repair Shop")
 sleep(2)
@@ -93,10 +161,15 @@ print("Press 2 to see a list of available computer for sale")
 sleep(2)
 print("Press 3 to sell a new or refurbished computer")
 sleep(2)
+print("Press 4 to access the Sales Assistant software")
+sleep(2)
 print("Press q to exit the program")
-transaction_choice = input(">>> ")
+
+transaction_choice = ' '
 
 while transaction_choice != 'q':
+
+    transaction_choice = input(">>> ")
 
     if transaction_choice == str(1):
         
@@ -106,7 +179,7 @@ while transaction_choice != 'q':
             print("Goodbye")
             sys.exit()
     
-    if transaction_choice == str(2):
+    elif transaction_choice == str(2):
         
         show_inventory()
         
@@ -114,7 +187,7 @@ while transaction_choice != 'q':
             print("Goodbye")
             sys.exit()
 
-    if transaction_choice == str(3):
+    elif transaction_choice == str(3):
         
         sell_computer()
 
@@ -122,6 +195,17 @@ while transaction_choice != 'q':
             print("Goodbye")
             sys.exit()
 
-    if transaction_choice == 'q':
+    elif transaction_choice == str(4):
+        
+        start_sales_assistant()
+
+        if not menu():
+            print("Goodbye")
+            sys.exit()
+
+    elif transaction_choice == 'q':
         print("Goodbye")
         sys.exit()
+
+    else:
+        print("Invalid input!")
